@@ -53,4 +53,8 @@ public class FileService {
     public File getFileById(int fileId) {
         return fileMapper.getFileById(fileId);
     }
+
+    public void deleteFile(int fileId) {
+        fileMapper.deleteFile(fileId);
+    }
 }

@@ -19,6 +19,7 @@ public class HomeController {
     @GetMapping()
     public String homePage(Authentication auth, Model model) {
 
+//        populate homepage with user's uploaded files
         model.addAttribute("files", fileService.getFiles(auth));
         return "home";
     }

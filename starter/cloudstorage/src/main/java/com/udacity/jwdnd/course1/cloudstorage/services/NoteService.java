@@ -41,4 +41,8 @@ public class NoteService {
         noteUpdate.setNoteDescription(noteUpdate.getNoteDescription());
         noteMapper.updateNote(noteUpdate);
     }
+
+    public void deleteNote(int noteId) {
+        noteMapper.deleteNote(noteId);
+    }
 }

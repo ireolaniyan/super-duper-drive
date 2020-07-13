@@ -81,7 +81,7 @@
                                     <tr>
                                         <td>
                                             <button type="button" th:onclick="javascript:showNoteModal( [[${note.noteId}]],[[${note.noteTitle}]],[[${note.noteDescription}]] )" class="btn btn-success">Edit</button>
-                                            <a class="btn btn-danger">Delete</a>
+                                            <a class="btn btn-danger" th:href="@{/notes/delete/} + ${note.noteId}">Delete</a>
                                         </td>
                                         <th scope="row" th:text="${note.noteTitle}"></th>
                                         <td th:text="${note.noteDescription}"></td>

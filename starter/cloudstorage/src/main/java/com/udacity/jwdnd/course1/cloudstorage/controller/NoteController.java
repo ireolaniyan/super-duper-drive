@@ -35,4 +35,10 @@ public class NoteController {
         return new ModelAndView("redirect:/home", model);
     }
 
+    @GetMapping("/delete/{noteId}")
+    public ModelAndView deleteNote(@PathVariable("noteId") int noteId, Authentication auth, ModelMap model) {
+        noteService.deleteNote(noteId);
+        model.addAttribute("notes", noteService.getNotes(auth));
+        return new ModelAndView("redirect:/home", model);
+    }
 }

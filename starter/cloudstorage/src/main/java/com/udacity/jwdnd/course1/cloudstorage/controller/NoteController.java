@@ -5,9 +5,8 @@ import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -27,8 +26,13 @@ public class NoteController {
 
     @PostMapping("/create")
     public ModelAndView createNote(Note note, Authentication auth, ModelMap model) {
-        noteService.addNote(auth, note);
+        if (!ObjectUtils.isEmpty(note.getNoteId())){
+            noteService.updateNote(note);
+        } else {
+            noteService.addNote(auth, note);
+        }
         model.addAttribute("notes", noteService.getNotes(auth));
         return new ModelAndView("redirect:/home", model);
     }
+
 }

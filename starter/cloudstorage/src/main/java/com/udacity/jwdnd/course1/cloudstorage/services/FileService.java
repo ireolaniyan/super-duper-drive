@@ -14,8 +14,8 @@ import java.util.List;
 
 @Service
 public class FileService {
-    private FileMapper fileMapper;
-    private UserMapper userMapper;
+    private final FileMapper fileMapper;
+    private final UserMapper userMapper;
 
     public FileService(FileMapper fileMapper, UserMapper userMapper) {
         this.fileMapper = fileMapper;

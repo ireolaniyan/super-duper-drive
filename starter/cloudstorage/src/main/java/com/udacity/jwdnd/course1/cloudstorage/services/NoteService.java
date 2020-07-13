@@ -13,8 +13,8 @@ import java.util.List;
 
 @Service
 public class NoteService {
-    private NoteMapper noteMapper;
-    private UserMapper userMapper;
+    private final NoteMapper noteMapper;
+    private final UserMapper userMapper;
 
     public NoteService(NoteMapper noteMapper, UserMapper userMapper) {
         this.noteMapper = noteMapper;
@@ -34,5 +34,11 @@ public class NoteService {
     public void addNote(Authentication auth, @ModelAttribute Note note) {
         User user = userMapper.getUser(auth.getName());
         noteMapper.addNote(new Note(null, note.getNoteTitle(), note.getNoteDescription(), user.getUserId()));
+    }
+
+    public void updateNote(Note noteUpdate) {
+        noteUpdate.setNoteTitle(noteUpdate.getNoteTitle());
+        noteUpdate.setNoteDescription(noteUpdate.getNoteDescription());
+        noteMapper.updateNote(noteUpdate);
     }
 }

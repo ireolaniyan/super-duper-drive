@@ -1,7 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
-import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -10,7 +9,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,5 +42,12 @@ public class CredentialController {
     @ResponseBody
     public List<String> decryptCredential(@PathVariable("credentialId") Integer credentialId){
         return Arrays.asList(credentialService.getDecryptedPassword(credentialId));
+    }
+
+    @GetMapping("/delete/{credentialId}")
+    public ModelAndView deleteNote(@PathVariable("credentialId") int credentialId, Authentication auth, ModelMap model) {
+        credentialService.deleteCredential(credentialId);
+        model.addAttribute("credentials", credentialService.getCredentials(auth));
+        return new ModelAndView("redirect:/home", model);
     }
 }

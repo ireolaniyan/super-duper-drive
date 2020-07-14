@@ -20,4 +20,7 @@ public interface CredentialMapper {
 
     @Select("SELECT * FROM CREDENTIALS WHERE credentialid = #{credentialId}")
     Credential getCredentialById(int credentialId);
+
+    @Delete("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialId}")
+    void deleteCredential(int credentialId);
 }

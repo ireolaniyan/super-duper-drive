@@ -139,7 +139,7 @@
                                 <tbody th:each="credential : ${credentials}">
                                 <tr>
                                     <td>
-                                        <button type="button" class="btn btn-success">Edit</button>
+                                        <button type="button" class="btn btn-success" th:onclick="javascript:showCredentialModal([[${credential.credentialId}]],[[${credential.url}]],[[${credential.userName}]],[[${credential.password}]] )">Edit</button>
                                         <a class="btn btn-danger">Delete</a>
                                     </td>
                                     <th scope="row" th:text="${credential.url}"></th>
@@ -208,8 +208,15 @@
                 $('#credential-id').val(credentialId ? credentialId : '');
                 $('#credential-url').val(url ? url : '');
                 $('#credential-username').val(username ? username : '');
-                $('#credential-password').val(password ? password : '');
+                $('#credential-password').val(password ? decryptPassword(credentialId) : '');
                 $('#credentialModal').modal('show');
+            }
+
+            function decryptPassword(credentialId){
+            	let result = fetch(`/credentials/decrypt-credential/${credentialId}`).then((response) => response.json())
+            	  .then((data) => {
+            		  $('#credential-password').val(data[0].toString());
+            	  });
             }
         </script>
     </body>

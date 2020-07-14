@@ -17,7 +17,7 @@ public interface NoteMapper {
     @Options(useGeneratedKeys = true, keyProperty = "noteId")
     int addNote(Note note);
 
-    @Update("UPDATE NOTES SET noteTitle = #{noteTitle}, notedescription= #{noteDescription} WHERE noteid = #{noteId}")
+    @Update("UPDATE NOTES SET notetitle = #{noteTitle}, notedescription= #{noteDescription} WHERE noteid = #{noteId}")
     void updateNote(Note note);
 
     @Delete("DELETE FROM NOTES WHERE noteid = #{noteId}")

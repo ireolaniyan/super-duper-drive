@@ -35,7 +35,7 @@ public class CredentialService {
         return credentialMapper.getUserStoredCredentials(user.getUserId());
     }
 
-    public void addCredential(Authentication auth, @ModelAttribute Credential credential) {
+    public int addCredential(Authentication auth, @ModelAttribute Credential credential) {
         User user = userMapper.getUser(auth.getName());
 
         SecureRandom random = new SecureRandom();
@@ -44,17 +44,17 @@ public class CredentialService {
         String encodedKey = Base64.getEncoder().encodeToString(key);
         String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), encodedKey);
 
-        credentialMapper.addCredential(new Credential(null, credential.getUrl(), credential.getUserName(), encodedKey, encryptedPassword, user.getUserId()));
+        return credentialMapper.addCredential(new Credential(null, credential.getUrl(), credential.getUserName(), encodedKey, encryptedPassword, user.getUserId()));
     }
 
-    public void updateCredential(Credential credentialUpdate) {
+    public int updateCredential(Credential credentialUpdate) {
         Credential credential = credentialMapper.getCredentialById(credentialUpdate.getCredentialId());
         String key = credential.getKey();
 
         credentialUpdate.setUrl(credentialUpdate.getUrl());
         credentialUpdate.setUserName(credentialUpdate.getUserName());
         credentialUpdate.setPassword(encryptionService.encryptValue(credentialUpdate.getPassword(), key));
-        credentialMapper.updateCredential(credentialUpdate);
+        return credentialMapper.updateCredential(credentialUpdate);
     }
 
     public String getDecryptedPassword(Integer credentialId) {

@@ -29,13 +29,29 @@ public class CredentialController {
 
     @PostMapping("/create")
     public ModelAndView createCredential(Credential credential, Authentication auth, ModelMap model) {
+        String message;
+
         if (!ObjectUtils.isEmpty(credential.getCredentialId())){
-            credentialService.updateCredential(credential);
+           int rowsUpdated = credentialService.updateCredential(credential);
+           if (rowsUpdated < 0) {
+               message = "An error occurred while updating credentials. Please try again.";
+               model.addAttribute("error", message);
+           } else {
+               message = "Successfully updated credentials.";
+               model.addAttribute("success", message);
+           }
         } else {
-            credentialService.addCredential(auth, credential);
+            int rowsAdded = credentialService.addCredential(auth, credential);
+            if (rowsAdded < 0) {
+                message = "An error occurred while adding credentials. Please try again.";
+                model.addAttribute("error", message);
+            } else {
+                message = "Successfully added credentials.";
+                model.addAttribute("success", message);
+            }
         }
         model.addAttribute("credentials", credentialService.getCredentials(auth));
-        return new ModelAndView("redirect:/home", model);
+        return new ModelAndView("result", model);
     }
 
     @GetMapping("/decrypt-credential/{credentialId}")
@@ -46,8 +62,10 @@ public class CredentialController {
 
     @GetMapping("/delete/{credentialId}")
     public ModelAndView deleteNote(@PathVariable("credentialId") int credentialId, Authentication auth, ModelMap model) {
+        String message = "Successfully deleted credentials.";
         credentialService.deleteCredential(credentialId);
+        model.addAttribute("successfulDelete", message);
         model.addAttribute("credentials", credentialService.getCredentials(auth));
-        return new ModelAndView("redirect:/home", model);
+        return new ModelAndView("result", model);
     }
 }

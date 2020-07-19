@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,16 +32,25 @@ public class FileController {
 
     @PostMapping("/upload")
     public ModelAndView postFile(Authentication auth, MultipartFile fileUpload, ModelMap model) throws IOException {
-
-        if (!fileService.isValidFilename(auth, fileUpload)) {
-            String fileUploadError = "File already exists. Rename file.";
-            model.addAttribute("fileUploadError", fileUploadError);
-        } else {
-            fileService.addFile(auth, fileUpload);
+        String message;
+        if (fileUpload.isEmpty()){
+            message = "Please select a file. Can't upload null/empty file.";
+            model.addAttribute("error", message);
+            model.addAttribute("files", fileService.getFiles(auth));
+            return new ModelAndView("result", model);
+        } else if (!fileService.isValidFilename(auth, fileUpload)) {
+            message = "File already exists. Rename file.";
+            model.addAttribute("error", message);
+            model.addAttribute("files", fileService.getFiles(auth));
+            return new ModelAndView("result", model);
         }
 
+        fileService.addFile(auth, fileUpload);
+        message = "File successfully uploaded.";
         model.addAttribute("files", fileService.getFiles(auth));
-        return new ModelAndView("redirect:/home", model);
+        model.addAttribute("success", message);
+        return new ModelAndView("result", model);
+
     }
 
     @GetMapping("/download/{fileId}")
@@ -58,8 +68,10 @@ public class FileController {
 
     @GetMapping("/delete/{fileId}")
     public ModelAndView deleteFile(@PathVariable("fileId") int fileId, Authentication auth, ModelMap model) {
+        String message = "Successfully deleted file.";
         fileService.deleteFile(fileId);
+        model.addAttribute("successfulDelete", message);
         model.addAttribute("files", fileService.getFiles(auth));
-        return new ModelAndView("redirect:/home", model);
+        return new ModelAndView("result", model);
     }
 }

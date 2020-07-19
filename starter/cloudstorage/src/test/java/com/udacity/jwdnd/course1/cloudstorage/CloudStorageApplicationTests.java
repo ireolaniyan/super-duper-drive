@@ -111,11 +111,15 @@ class CloudStorageApplicationTests {
 		//add note
 		HomePage homePage = new HomePage(driver);
 		homePage.addNote(noteTitle, noteDescription, jse, wait);
-		assertEquals("Home", driver.getTitle());
+		assertEquals("Result", driver.getTitle());
 
 		//check for note
+		driver.get(baseURL + "/home");
 		boolean created = homePage.checkForNote(noteTitle, jse);
 		Assertions.assertTrue(created);
+
+		homePage.logout();
+		assertEquals("Login", driver.getTitle());
 	}
 
 	@Test
@@ -133,11 +137,15 @@ class CloudStorageApplicationTests {
 		//update note
 		HomePage homePage = new HomePage(driver);
 		homePage.updateNote(newNoteTitle, jse, wait);
-		assertEquals("Home", driver.getTitle());
+		assertEquals("Result", driver.getTitle());
 
 		//check the updated note
+		driver.get(baseURL + "/home");
 		boolean edited = homePage.checkForNote(noteTitle, jse);
 		Assertions.assertTrue(edited);
+
+		homePage.logout();
+		assertEquals("Login", driver.getTitle());
 	}
 
 	@Test
@@ -153,8 +161,12 @@ class CloudStorageApplicationTests {
 
 		//delete note
 		HomePage homePage = new HomePage(driver);
-		homePage.deleteNote(jse, wait);
-		assertEquals("Home", driver.getTitle());
+		boolean deleted = homePage.deleteNote(jse, wait);
+		Assertions.assertTrue(deleted);
+
+		driver.get(baseURL + "/home");
+		homePage.logout();
+		assertEquals("Login", driver.getTitle());
 	}
 
 	@Test
@@ -171,11 +183,15 @@ class CloudStorageApplicationTests {
 		//add credential
 		HomePage homePage = new HomePage(driver);
 		homePage.addCredentials(credURL,userName, password, jse, wait);
-		assertEquals("Home", driver.getTitle());
+		assertEquals("Result", driver.getTitle());
 
 		//check for credential
+		driver.get(baseURL + "/home");
 		boolean created = homePage.checkForCredentials(userName, jse);
 		Assertions.assertTrue(created);
+
+		homePage.logout();
+		assertEquals("Login", driver.getTitle());
 	}
 
 	@Test
@@ -193,11 +209,15 @@ class CloudStorageApplicationTests {
 		//update credential
 		HomePage homePage = new HomePage(driver);
 		homePage.updateCredentials(newCredUsername, jse, wait);
-		assertEquals("Home", driver.getTitle());
+		assertEquals("Result", driver.getTitle());
 
 		//check the updated note
+		driver.get(baseURL + "/home");
 		boolean edited = homePage.checkForCredentials(newCredUsername, jse);
 		Assertions.assertTrue(edited);
+
+		homePage.logout();
+		assertEquals("Login", driver.getTitle());
 	}
 
 	@Test
@@ -213,7 +233,11 @@ class CloudStorageApplicationTests {
 
 		//delete credentials
 		HomePage homePage = new HomePage(driver);
-		homePage.deleteCredentials(jse, wait);
-		assertEquals("Home", driver.getTitle());
+		boolean deleted = homePage.deleteCredentials(jse, wait);
+		Assertions.assertTrue(deleted);
+
+		driver.get(baseURL + "/home");
+		homePage.logout();
+		assertEquals("Login", driver.getTitle());
 	}
 }

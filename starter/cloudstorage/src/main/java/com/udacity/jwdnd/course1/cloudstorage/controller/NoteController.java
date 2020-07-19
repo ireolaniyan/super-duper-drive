@@ -26,19 +26,37 @@ public class NoteController {
 
     @PostMapping("/create")
     public ModelAndView createNote(Note note, Authentication auth, ModelMap model) {
+        String message;
         if (!ObjectUtils.isEmpty(note.getNoteId())){
-            noteService.updateNote(note);
+            int rowsUpdated = noteService.updateNote(note);
+            if (rowsUpdated < 0) {
+                message = "An error occurred while updating note. Please try again.";
+                model.addAttribute("error", message);
+            } else {
+                message = "Successfully updated note.";
+                model.addAttribute("success", message);
+            }
         } else {
-            noteService.addNote(auth, note);
+           int rowsAdded = noteService.addNote(auth, note);
+           if (rowsAdded < 0) {
+               message = "An error occurred while adding note. Please try again.";
+               model.addAttribute("error", message);
+           } else {
+               message = "Successfully added note.";
+               model.addAttribute("success", message);
+           }
         }
+
         model.addAttribute("notes", noteService.getNotes(auth));
-        return new ModelAndView("redirect:/home", model);
+        return new ModelAndView("result", model);
     }
 
     @GetMapping("/delete/{noteId}")
     public ModelAndView deleteNote(@PathVariable("noteId") int noteId, Authentication auth, ModelMap model) {
+        String message = "Successfully deleted note.";
         noteService.deleteNote(noteId);
+        model.addAttribute("successfulDelete", message);
         model.addAttribute("notes", noteService.getNotes(auth));
-        return new ModelAndView("redirect:/home", model);
+        return new ModelAndView("result", model);
     }
 }

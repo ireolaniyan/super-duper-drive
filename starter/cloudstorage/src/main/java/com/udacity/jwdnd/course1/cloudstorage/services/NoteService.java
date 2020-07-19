@@ -31,15 +31,15 @@ public class NoteService {
         return noteMapper.getUserNotes(user.getUserId());
     }
 
-    public void addNote(Authentication auth, @ModelAttribute Note note) {
+    public int addNote(Authentication auth, @ModelAttribute Note note) {
         User user = userMapper.getUser(auth.getName());
-        noteMapper.addNote(new Note(null, note.getNoteTitle(), note.getNoteDescription(), user.getUserId()));
+        return noteMapper.addNote(new Note(null, note.getNoteTitle(), note.getNoteDescription(), user.getUserId()));
     }
 
-    public void updateNote(Note noteUpdate) {
+    public int updateNote(Note noteUpdate) {
         noteUpdate.setNoteTitle(noteUpdate.getNoteTitle());
         noteUpdate.setNoteDescription(noteUpdate.getNoteDescription());
-        noteMapper.updateNote(noteUpdate);
+        return noteMapper.updateNote(noteUpdate);
     }
 
     public void deleteNote(int noteId) {

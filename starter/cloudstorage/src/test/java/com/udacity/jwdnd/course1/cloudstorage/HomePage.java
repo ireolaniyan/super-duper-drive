@@ -105,18 +105,22 @@ public class HomePage {
         saveNoteButton.click();
     }
 
-    public void deleteNote(JavascriptExecutor jse, WebDriverWait wait) {
+    public boolean deleteNote(JavascriptExecutor jse, WebDriverWait wait) {
         jse.executeScript("arguments[0].click()", notesTab);
         List<WebElement> notesList = notesTable.findElements(By.tagName("td"));
         WebElement deleteElement = null;
+        Boolean deleted = false;
         for (int i = 0; i < notesList.size(); i++) {
             WebElement element = notesList.get(i);
             deleteElement = element.findElement(By.name("delete-note-btn"));
             if (deleteElement != null){
+                wait.until(ExpectedConditions.elementToBeClickable(deleteElement)).click();
+                deleted = true;
                 break;
             }
         }
-        wait.until(ExpectedConditions.elementToBeClickable(deleteElement)).click();
+
+        return deleted;
     }
 
     public void addCredentials(String credURL, String userName, String password, JavascriptExecutor jse, WebDriverWait wait) {
@@ -162,17 +166,21 @@ public class HomePage {
         saveCredentialButton.click();
     }
 
-    public void deleteCredentials(JavascriptExecutor jse, WebDriverWait wait) {
+    public boolean deleteCredentials(JavascriptExecutor jse, WebDriverWait wait) {
         jse.executeScript("arguments[0].click()", credentialsTab);
         List<WebElement> credsList = credsTable.findElements(By.tagName("td"));
         WebElement deleteElement = null;
+        Boolean deleted = false;
         for (int i = 0; i < credsList.size(); i++) {
             WebElement element = credsList.get(i);
             deleteElement = element.findElement(By.name("delete-credential-btn"));
-            if (deleteElement != null){
+            if (deleteElement != null) {
+                wait.until(ExpectedConditions.elementToBeClickable(deleteElement)).click();
+                deleted = true;
                 break;
             }
         }
-        wait.until(ExpectedConditions.elementToBeClickable(deleteElement)).click();
+
+        return deleted;
     }
 }
